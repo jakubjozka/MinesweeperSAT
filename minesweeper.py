@@ -106,7 +106,7 @@ def print_result(result, grid):
 
     if result.returncode == 20:
         print("\n" + "="*50)
-        print("UNSATISFIABLE - No valid mine configuration exists")
+        print("UNSATISFITABLE - No valid mine configuration exists")
 
     model = []
     for line in result.stdout.decode('utf-8').split('\n'):
@@ -117,7 +117,7 @@ def print_result(result, grid):
     model.remove(0)
 
     print("\n" + "="*50)
-    print("SOLUTION - Mine Configuration:")
+    print("SATISFITABLE - Mine Configuration:")
     print("\n" + "="*50)
 
     for r in range(ROWS):
