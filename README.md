@@ -1,1 +1,1 @@
-# -MinesweeperSAT
+# MinesweeperSAT
