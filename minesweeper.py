@@ -16,9 +16,35 @@ def load_instance(input_file_name):
     
     return grid
 
-def encode ():
+def encode (grid):
+    """
+    Encode the Minesweeper instance as a CNF formula
+
+    Variables:
+    - Mine(r, c): cell at row r, column c contains a mine
+
+    Constraints:
+    - If a cell shows number k, exactly k of its neighbors must contain mines
+    - If a cell is revealed (has a number), it cannot contain a mine
+
+    Return:
+    - CNF: list of clauses (each clause is a list of integers ending with 0)
+    - nr_vars: total number of variables
+    """
     cnf = []
     nr_vars = ROWS * COLS
+
+    for r in range(ROWS):
+        for c in range(COLS):
+            cell = grid[r][c]
+
+            if cell.isdigit():
+                k = int(cell)
+
+                cnf.append([-pos_to_mineID(r, c), 0])
+                neigbors = get_neighbors(r, c)
+
+                add_exactly_k_constraints(cnf, neigbors, k)
     
     return (cnf, nr_vars)
 
@@ -36,13 +62,42 @@ def get_neighbors(r, c):
                 neighbors.append((nr, nc))
     return neighbors
 
+def add_exactly_k_constraints(cnf, neighbors, k):
+    """
+    Add constraints that exactly k of the neighbors cells contain mines
+
+    - "At most k": for every subset of (k+1) neighbors, at least one is NOT a mine
+    - "At least k": for every subset of (n-k+1) neighbors, at least one IS a mine
+
+    where n = total number of neighbors
+    """
+    from itertools import combinations
+
+    n = len(neighbors)
+
+    if k < n:
+        for subset in combinations(neighbors, k + 1):
+            clause = []
+            for (nr, nc) in subset:
+                clause.append(-pos_to_mineID(nr, nc))
+            clause.append(0)
+            cnf.append(clause)
+
+    if k > 0:
+        for subset in combinations(neighbors, n - k + 1):
+            clause = []
+            for (nr, nc) in subset:
+                clause.append(pos_to_mineID(nr, nc))
+            clause.append(0)
+            cnf.append(clause)
+
 def call_solver(cnf, nr_vars, output_name, solver_name, verbosity):
     with open(output_name, 'w') as file:
         file.write("p cnf " + str(nr_vars) + " " + str(len(cnf)) + "\n")
         for clause in cnf:
             file.write(' '.join(str(lit) for lit in clause) + '\n')
 
-    return subprocess.run(['./' + solver_name, '-model', '-ver=' + str(verbosity), output_name],
+    return subprocess.run(['./' + solver_name, '-model', '-verb=' + str(verbosity), output_name],
                           stdout=subprocess.PIPE)
 
 def print_result(result, grid):
