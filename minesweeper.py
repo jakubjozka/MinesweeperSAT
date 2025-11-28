@@ -105,16 +105,24 @@ def print_result(result, grid):
         print(line)
 
     if result.returncode == 20:
-        print("\n" + "="*50)
+        print("\n" + "="*51)
         print("UNSATISFITABLE - No valid mine configuration exists")
+        print("="*51)
+        return
 
     model = []
     for line in result.stdout.decode('utf-8').split('\n'):
         if line.startswith("v"):
             vars = line.split(" ")
             vars.remove("v")
-            model.extend(int(v) for v in vars)
-    model.remove(0)
+            model.extend(int(v) for v in vars if v)
+    
+    if model and model[-1] == 0:
+        model.pop()
+
+    model_dict = {}
+    for var in model:
+        model_dict[abs(var)] = (var > 0)
 
     print("\n" + "="*50)
     print("SATISFITABLE - Mine Configuration:")
@@ -123,7 +131,7 @@ def print_result(result, grid):
     for r in range(ROWS):
         for c in range(COLS):
             var_id = pos_to_mineID(r, c)
-            if model[var_id - 1] > 0:
+            if var_id in model_dict and model_dict[var_id]:
                 print("M", end=" ")
             else:
                 if grid[r][c].isdigit():
