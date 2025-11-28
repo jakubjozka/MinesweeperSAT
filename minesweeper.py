@@ -106,7 +106,7 @@ def print_result(result, grid):
 
     if result.returncode == 20:
         print("\n" + "="*51)
-        print("UNSATISFITABLE - No valid mine configuration exists")
+        print("UNSATISFIABLE - No valid mine configuration exists")
         print("="*51)
         return
 
@@ -125,8 +125,8 @@ def print_result(result, grid):
         model_dict[abs(var)] = (var > 0)
 
     print("\n" + "="*50)
-    print("SATISFITABLE - Mine Configuration:")
-    print("\n" + "="*50)
+    print("SATISFIABLE - Mine Configuration:")
+    print("="*50)
 
     for r in range(ROWS):
         for c in range(COLS):
