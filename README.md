@@ -71,6 +71,18 @@ python3 minesweeper.py [-h] [-i INPUT] [-o OUTPUT] [-s SOLVER] [-v {0,1}]
 ### Generování instancí
 
 Pro vytváření větších instancí jsem vytvořil pomocný skript ```generateInstance.py```. Využití pro random mode:
-```python3 generateInstance.py random <rows> <cols> [mine_density] [reveal_density]```
+```
+python3 generateInstance.py random <rows> <cols> [mine_density] [reveal_density]
+```
 - ```mine_density```: Podíl políček s minami (0.0-1.0), výchozí 0.2
 - ```reveal_density```: Podíl odkrytých políček (0.0-1.0), výchozí 0.3
+
+## Přiložené vstupy
+- ```small-sat.in```: Splnitelná 3x3 instance
+- ```small-unsat.in```: Nesplnitelná 3x3 instance
+- ```medium-sat.in```: Splnitelná 4x4 instance
+- ```large-sat.in```: Splnitelná 5x5 instance
+- ```hard-sat.in```: Splnitelná 100x100 instance
+    + vygenerovaná pomocí ```generateInstance.py random 100 100 0.15 0.2```
+- ```extreme-sat.in```: Splnitelná 1000x1000 instance, SAT solver čas 4.2s, 
+    + vygenerovaná pomocí ```generateInstance.py random 1000 1000 0.15 0.2```
