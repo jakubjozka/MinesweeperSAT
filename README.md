@@ -55,8 +55,22 @@ Pro každé políčko $(r, c)$ které je odkryté s číslem $k$:
 
 ## Uživatelská dokumentace
 
-Základní použití
+### Základní použití
 
 ```
 python3 minesweeper.py [-h] [-i INPUT] [-o OUTPUT] [-s SOLVER] [-v {0,1}]
 ```
+
+### Parametry příkazové řádky
+- ```-h```, ```--help```: Zobrazí nápovědu a ukončí program
+- ```-i INPUT```, ```--input INPUT```: Vstupní soubor s instancí. Výchozí: "input.in"
+- ```-o OUTPUT```, ```--output OUTPUT```: Výstpuní soubor pro DIMACS formát (CNF formuli). Výchozí: "formula.cnf"
+- ```-s SOLVER```, ```--solver SOLVER```: Cesta k SAT solveru. Výchozí: "glucose-syrup"
+- ```-v {0,1}```, ```--verb {0,1}```: Úroveň výřečnosti SAT solveru
+
+### Generování instancí
+
+Pro vytváření větších instancí jsem vytvořil pomocný skript ```generateInstance.py```. Využití pro random mode:
+```python3 generateInstance.py random <rows> <cols> [mine_density] [reveal_density]```
+- ```mine_density```: Podíl políček s minami (0.0-1.0), výchozí 0.2
+- ```reveal_density```: Podíl odkrytých políček (0.0-1.0), výchozí 0.3
