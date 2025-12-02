@@ -63,14 +63,14 @@ python3 minesweeper.py [-h] [-i INPUT] [-o OUTPUT] [-s SOLVER] [-v {0,1}]
 
 ### Parametry příkazové řádky
 - `-h`, `--help`: Zobrazí nápovědu a ukončí program
-- `-i INPUT`, `--input INPUT`: Vstupní soubor s instancí. Výchozí: "input.in"
+- `-i INPUT`, `--input INPUT`: Vstupní soubor. Výchozí: "input.in"
 - `-o OUTPUT`, `--output OUTPUT`: Výstpuní soubor pro DIMACS formát (CNF formuli). Výchozí: "formula.cnf"
 - `-s SOLVER`, `--solver SOLVER`: Cesta k SAT solveru. Výchozí: "glucose-syrup"
 - `-v {0,1}`, `--verb {0,1}`: Úroveň výřečnosti SAT solveru
 
-### Generování instancí
+### Generování vstupů
 
-Pro vytváření větších instancí jsem vytvořil pomocný skript `generateInstance.py`. Využití pro random mode:
+Pro vytváření větších vstupů jsem vytvořil pomocný skript `generateInstance.py`. Využití pro random mode:
 ```
 python3 generateInstance.py random <rows> <cols> [mine_density] [reveal_density]
 ```
@@ -78,20 +78,20 @@ python3 generateInstance.py random <rows> <cols> [mine_density] [reveal_density]
 - `reveal_density`: Podíl odkrytých políček (0.0-1.0), výchozí 0.3
 
 ## Přiložené vstupy
-- `small-sat.in`: Splnitelná 3x3 instance
-- `small-unsat.in`: Nesplnitelná 3x3 instance
-- `medium-sat.in`: Splnitelná 4x4 instance
-- `large-sat.in`: Splnitelná 5x5 instance
-- `hard-sat.in`: Splnitelná 100x100 instance
+- `small-sat.in`: Splnitelný 3x3 vstup
+- `small-unsat.in`: Nesplnitelný 3x3 vstup
+- `medium-sat.in`: Splnitelný 4x4 vstup
+- `large-sat.in`: Splnitelný 5x5 vstup
+- `hard-sat.in`: Splnitelný 100x100 vstup
     + vygenerovaná pomocí `generateInstance.py random 100 100 0.15 0.2`
-- `extreme-sat.in`: Splnitelná 1000x1000 instance, SAT solver čas 4.2s, skutečný čas naměřený pomocí `time` 26s
+- `extreme-sat.in`: Splnitelný 1000x1000 vstup, SAT solver čas 4.2s, skutečný čas naměřený pomocí `time` 26s
     + vygenerovaná pomocí `generateInstance.py random 1000 1000 0.15 0.2`
 
 ## Experimenty
 
 Experimenty byly spuštěny na CPU Intel(R) Core(TM) i7-14650HX a 16 GB RAM na Ubuntu 22.04 v WSL (Windows 11). Čas byl měřen pomocí příkazu `time`.
 
-### Test různých velikostí instancí
+### Test různých velikostí vstupů
 
 | Velikost   | Počet proměnných | SAT solver čas | Skutečný čas | Výsledek |
 | ---------- | ---------------- | -------------- | ------------ | -------- |
@@ -107,5 +107,12 @@ Experimenty byly spuštěny na CPU Intel(R) Core(TM) i7-14650HX a 16 GB RAM na U
 
 ### Pozorování
 
-1. Čas roste přibližne exponenciálně s velikostí mřížky
-2. Nesplnitelné instance se řeší rychleji než splnitelné, protože solver najde rozpor dříve, než musí prozkoumat celý stavový prostor.
+1. Čas roste přibližne kvadraticky s velikostí mřížky
+2. Nesplnitelné vstupy se řeší rychleji než splnitelné, protože solver najde rozpor dříve, než musí prozkoumat celý stavový prostor.
+3. Pro velké vstupy (1000x1000) tvoří významnou část času spíše kódóvaní do CNF a dekódování, než-li SAT samotný
+
+### Pokus o vytvoření 10+ sekundové vstupu
+
+Pomocí skriptu pro generování vstupů jsem vytvořil splnitelný vstupní soubor o velikosti 2000x2000. 
+SAT solver na něm měl naměřený čas 11 minut a 42 sekund, skutečný běh trval 14 minut a 18 sekund. 
+Tento výsledek jsem do tabulky nezařadil, protože by po vykreslení v grafu narušoval jeho přehlednost.
