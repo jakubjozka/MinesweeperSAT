@@ -89,7 +89,7 @@ python3 generateInstance.py random <rows> <cols> [mine_density] [reveal_density]
 
 ## Experimenty
 
-Experimenty byly spuštěny na CPU Intel(R) Core(TM) i7-14650HX a 16 GB RAM na Ubuntu 22.04 v WSL (Windows 11). Čas byl měřen pomocí příkazu `time`.
+Experimenty byly spuštěny na CPU Intel(R) Core(TM) i7-14650HX a 16 GB RAM na Ubuntu 22.04 v WSL (Windows 11). Skutečný čas byl měřen pomocí příkazu `time` a zahrnuje i generování CNF a dekódování.
 
 ### Test různých velikostí vstupů
 
